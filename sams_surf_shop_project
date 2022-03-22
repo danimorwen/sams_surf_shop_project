@@ -1,3 +1,4 @@
+# Write your code below:
 import surfshop
 import unittest
 
@@ -6,22 +7,25 @@ class ShopTests(unittest.TestCase):
     def setUp(self):
         self.cart = surfshop.ShoppingCart()
 
-    def test_add_1_surfboards(self):
-        self.assertEqual(
-            self.cart.add_surfboards(1), "Successfully added 1 surfboard to cart!"
-        )
+    def test_add_surfboard(self):
+        message = self.cart.add_surfboards(quantity=1)
+        self.assertEqual(message, f"Successfully added 1 surfboard to cart!")
 
-    def test_add_2_surfboards(self):
-        self.assertEqual(
-            self.cart.add_surfboards(2), "Successfully added 2 surfboards to cart!"
-        )
+    def test_add_surfboards(self):
+        for i in range(2, 5):
+            with self.subTest(i=i):
+                message = self.cart.add_surfboards(i)
+                self.assertEqual(message, f"Successfully added {i} surfboards to cart!")
+                self.cart = surfshop.ShoppingCart()
 
+    @unittest.skip("Business returns to normal")
     def test_too_many_boards_error(self):
         self.assertRaises(surfshop.TooManyBoardsError, self.cart.add_surfboards, 5)
 
-    @unittest.expectedFailure
+    # @unittest.expectedFailure
     def test_apply_locals_discount(self):
-        self.assertTrue(self.cart.apply_locals_discount())
+        self.cart.apply_locals_discount()
+        self.assertTrue(self.cart.locals_discount)
 
 
 unittest.main()
